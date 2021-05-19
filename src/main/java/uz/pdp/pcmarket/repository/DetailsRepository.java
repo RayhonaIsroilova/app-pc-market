@@ -2,9 +2,30 @@ package uz.pdp.pcmarket.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import uz.pdp.pcmarket.entity.Details;
 import uz.pdp.pcmarket.projection.DetailsCustom;
 
-@RepositoryRestResource(path = "details",collectionResourceRel = "list",excerptProjection = DetailsCustom.class)
-public interface DetailsRepository extends JpaRepository<Details,Integer> {
+import java.util.List;
+import java.util.Optional;
+
+@RepositoryRestResource(path = "details", collectionResourceRel = "list", excerptProjection = DetailsCustom.class)
+public interface DetailsRepository extends JpaRepository<Details, Integer> {
+
+
+    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
+    @Override
+    List<Details> findAll();
+
+    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
+    @Override
+    Optional<Details> findById(Integer integer);
+
+    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
+    @Override
+    <S extends Details> S save(S s);
+
+    @PreAuthorize(value = "hasRole('SUPER_ADMIN')")
+    @Override
+    void deleteById(Integer integer);
 }
