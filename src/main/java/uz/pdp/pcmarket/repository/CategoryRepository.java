@@ -12,20 +12,4 @@ import java.util.Optional;
 @RepositoryRestResource(path = "category",collectionResourceRel = "list",excerptProjection = CategoryCustom.class)
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    List<Category> findAll();
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    Optional<Category> findById(Integer integer);
-
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    <S extends Category> S save(S s);
-
-    @PreAuthorize(value = "hasRole('SUPER_ADMIN')")
-    @Override
-    void deleteById(Integer integer);
 }

@@ -14,21 +14,4 @@ import java.util.Optional;
 @RepositoryRestResource(path = "position",collectionResourceRel = "list",excerptProjection = PositionCustom.class)
 public interface PositionRepository extends JpaRepository<Position,Integer> {
 
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    List<Position> findAll();
-
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    Optional<Position> findById(Integer integer);
-
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    <S extends Position> S save(S s);
-
-    @PreAuthorize(value = "hasRole('SUPER_ADMIN')")
-    @Override
-    void deleteById(Integer integer);
 }

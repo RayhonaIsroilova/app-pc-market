@@ -12,21 +12,5 @@ import java.util.Optional;
 
 @RepositoryRestResource(path = "userBasket",collectionResourceRel = "list",excerptProjection = ArticleCustom.class)
 public interface UserBasketRepository extends JpaRepository<UserBasket, Integer> {
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    List<UserBasket> findAll();
 
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    Optional<UserBasket> findById(Integer integer);
-
-    @PreAuthorize(value = "hasAnyRole('SUPER_ADMIN','MODERATOR','OPERATOR')")
-    @Override
-    <S extends UserBasket> S save(S s);
-
-
-    @PreAuthorize(value = "hasRole('SUPER_ADMIN')")
-    @Override
-    void deleteById(Integer integer);
 }

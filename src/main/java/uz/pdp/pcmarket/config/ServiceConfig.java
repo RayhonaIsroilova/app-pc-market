@@ -2,6 +2,7 @@ package uz.pdp.pcmarket.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,11 +19,11 @@ public class ServiceConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("SUPER_ADMIN").password(passwordEncoder().encode("admin")).roles("SUPER_ADMIN")
+                .withUser("OPERATOR").password(passwordEncoder().encode("operator")).roles("OPERATOR")
                 .and()
                 .withUser("MODERATOR").password(passwordEncoder().encode("moderator")).roles("MODERATOR")
                 .and()
-                .withUser("OPERATOR").password(passwordEncoder().encode("operator")).roles("OPERATOR");
+                .withUser("SUPER_ADMIN").password(passwordEncoder().encode("admin")).roles("SUPER_ADMIN");
     }
 
     @Override
@@ -30,6 +31,10 @@ public class ServiceConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/api/Order/**").hasAnyRole("OPERATOR", "SUPER_ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/Product").hasAnyRole("MODERATOR", "SUPER_ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/Product/*").hasAnyRole("MODERATOR", "SUPER_ADMIN")
+                .antMatchers("/api/**").hasRole("SUPER_ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -37,7 +42,7 @@ public class ServiceConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
